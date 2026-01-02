@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parth Chetan Rajguru | Data Analytics Portfolio</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="bg-grid"></div>
+  <div class="shape shape-a"></div>
+  <div class="shape shape-b"></div>
+  <div class="shape shape-c"></div>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="brand">
+      <div class="logo">PR</div>
+      <div class="brand-text">
+        <div class="brand-name">Parth Chetan Rajguru</div>
+        <div class="brand-tagline">EDA • Regression (scikit-learn) • Business Insights</div>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a href="#services">What I Do</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-top reveal show">
+        <div class="hero-photo interactive">
+          <!-- Put your photo in repo as: hero-photo.jpg -->
+          <img src="./parth.jpg" alt="Parth Rajguru"
+               onerror="this.style.display='none'; document.querySelector('.photo-fallback').style.display='grid';" />
+          <div class="photo-fallback" style="display:none;">
+            <div>
+              <div class="fallback-title">Add your photo</div>
+              <div class="fallback-sub">hero-photo.jpg</div>
+            </div>
+          </div>
+        </div>
+
+        <p class="kicker">DATA ANALYTICS PORTFOLIO</p>
+        <h1 class="hero-title">Parth Chetan Rajguru</h1>
+        <p class="hero-headline">EDA & Regression Modeling (scikit-learn)</p>
+        <p class="hero-sub">I turn raw datasets into insights and simple predictive models.</p>
+
+        <div class="tool-icons">
+          <span class="tool-pill"><span class="dot dot-violet"></span> Python</span>
+          <span class="tool-pill"><span class="dot dot-cyan"></span> scikit-learn</span>
+          <span class="tool-pill"><span class="dot dot-amber"></span> Excel</span>
+        </div>
+      </div>
+
+      <div class="hero-card surface reveal">
+        <div class="hero-card-left">
+          <div class="hero-proof">
+            <div class="proof-item">
+              <div class="proof-num">5</div>
+              <div class="proof-text">Projects</div>
+            </div>
+            <div class="proof-item">
+              <div class="proof-num">EDA</div>
+              <div class="proof-text">Clean + Visual</div>
+            </div>
+            <div class="proof-item">
+              <div class="proof-num">R²</div>
+              <div class="proof-text">Metrics</div>
+            </div>
+          </div>
+
+          <div class="hero-strip">
+            <div class="strip-title">Employer-friendly strengths</div>
+            <div class="strip-points">
+              <span>Structured notebooks</span>
+              <span>Clear visuals + interpretation</span>
+              <span>Regression with MAE/RMSE/R²</span>
+              <span>Reproducible GitHub proof</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-card-right">
+          <div class="hero-box interactive">
+            <div class="hero-box-title">Fast summary</div>
+            <ul>
+              <li>Clean data and fix quality issues</li>
+              <li>Visualize trends + correlations</li>
+              <li>Build baseline regression models</li>
+              <li>Explain results in plain English</li>
+            </ul>
+            <div class="hero-box-foot">Minimal. Professional. Proof-first.</div>
+          </div>
+
+          <div class="hero-mini">
+            <div class="mini-title">Currently open to</div>
+            <p class="mini-sub">Data Analyst / Business Analyst internships, or freelance EDA & regression support.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- WHAT I DO -->
+    <section id="services" class="section">
+      <div class="section-head">
+        <h2>What I Do</h2>
+        <p>What I deliver quickly, clearly, and reliably.</p>
+      </div>
+
+      <div class="services">
+        <article class="service-card surface interactive reveal">
+          <div class="service-top">
+            <div class="service-icon">📌</div>
+            <h3>Exploratory Data Analysis (EDA)</h3>
+          </div>
+          <p class="service-sub">Make messy data analysis-ready and understandable.</p>
+          <ul class="mini-list">
+            <li>Data inspection + structure checks</li>
+            <li>Missing values strategy</li>
+            <li>Outliers (IQR) + quality fixes</li>
+          </ul>
+          <div class="service-outcome">Outcome: clean dataset + key patterns.</div>
+        </article>
+
+        <article class="service-card surface interactive reveal">
+          <div class="service-top">
+            <div class="service-icon">📈</div>
+            <h3>Visualization & Insights</h3>
+          </div>
+          <p class="service-sub">Charts that tell a story (not just decoration).</p>
+          <ul class="mini-list">
+            <li>Distributions, trends, correlation checks</li>
+            <li>Segment comparisons</li>
+            <li>Business interpretation</li>
+          </ul>
+          <div class="service-outcome">Outcome: decisions supported by visuals.</div>
+        </article>
+
+        <article class="service-card surface interactive reveal">
+          <div class="service-top">
+            <div class="service-icon">🧮</div>
+            <h3>Regression Modeling</h3>
+          </div>
+          <p class="service-sub">Explainable baseline models with clear evaluation.</p>
+          <ul class="mini-list">
+            <li>Simple + multiple regression</li>
+            <li>Feature prep + train/test</li>
+            <li>R² / MAE / RMSE reporting</li>
+          </ul>
+          <div class="service-outcome">Outcome: predictive baseline + clarity.</div>
+        </article>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- SKILLS -->
+    <section id="skills" class="section">
+      <div class="section-head">
+        <h2>Skills</h2>
+        <p>Accurate tools and methods only.</p>
+      </div>
+
+      <div class="skills-grid">
+        <div class="panel surface interactive reveal">
+          <h3 class="panel-title">Tools</h3>
+          <div class="chips">
+            <span>Python</span><span>Pandas</span><span>NumPy</span>
+            <span>Matplotlib</span><span>Seaborn</span>
+            <span>scikit-learn</span><span>Excel</span><span>Jupyter</span>
+          </div>
+        </div>
+
+        <div class="panel surface interactive reveal">
+          <h3 class="panel-title">Methods</h3>
+          <div class="chips">
+            <span>Cleaning</span><span>Outliers (IQR)</span><span>Feature Prep</span>
+            <span>Regression</span><span>Evaluation</span><span>R²</span><span>MAE</span><span>RMSE</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="section">
+      <div class="section-head">
+        <h2>Projects</h2>
+        <p>Proof of work (5 uniform horizontal cards).</p>
+      </div>
+
+      <div class="projects">
+        <article class="proj-card reveal">
+          <div class="thumb"><img src="https://plus.unsplash.com/premium_photo-1733317391601-b1651d6d4be9?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Project thumbnail"></div>
+          <div class="proj-body">
+            <h3>Project 1: EDA Case Study</h3>
+            <p class="proj-desc">Cleaned the dataset, handled missing values/outliers, and produced key insights using structured EDA and visuals.</p>
+            <div class="proj-chips"><span>Cleaning</span><span>Visualization</span><span>Insights</span></div>
+            <a class="proj-link" href="https://github.com/klifjtumper88/Customer-Churn-Analysis-Prediction.git" target="_blank" rel="noreferrer">View on GitHub →</a>
+          </div>
+        </article>
+
+        <article class="proj-card reveal">
+          <div class="thumb"><img src="https://www.purebookkeeping.com/hubfs/images/blog/pb-blog/sales-forecast.png" alt="Project thumbnail"></div>
+          <div class="proj-body">
+            <h3>Project 2: Sales-Forecasting-Time-Series</h3>
+            <p class="proj-desc">Time series analysis and forecasting of BMW sales revenue to uncover trends, seasonality, and business insights.</p>
+            <div class="proj-chips"><span>Visualization</span><span>Correlation</span><span>Summary</span></div>
+            <a class="proj-link" href="https://github.com/klifjtumper88/Sales-Forecasting-Time-Series-.git" target="_blank" rel="noreferrer">View on GitHub →</a>
+          </div>
+        </article>
+
+        <article class="proj-card reveal">
+          <div class="thumb"><img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/0*mR7bzszbpIK9Wv_9.jpg" alt="Project thumbnail"></div>
+          <div class="proj-body">
+            <h3>Project 3: Strategic Insights from Australian Lighting Industry Sales Data</h3>
+            <p class="proj-desc">A data-driven analysis of Australian lighting sales focused on cleaning, exploration, and uncovering actionable business insights.</p>
+            <div class="proj-chips"><span>Cleaning</span><span>Outliers (IQR)</span><span>Documentation</span></div>
+            <a class="proj-link" href="https://github.com/klifjtumper88/Strategic-Insights-from-Australian-Lighting-Industry-Sales-Data.git" target="_blank" rel="noreferrer">View on GitHub →</a>
+          </div>
+        </article>
+
+        <article class="proj-card reveal">
+          <div class="thumb"><img src="https://cdn.botpenguin.com/assets/website/Big_Data_35e26a7d4d.webp" alt="Project thumbnail"></div>
+          <div class="proj-body">
+            <h3>Project 4: Possum Morphological Analysis: Data Cleaning, Statistical Testing & Regression Insights</h3>
+            <p class="proj-desc">This project applies rigorous data cleaning, outlier treatment, hypothesis testing, and regression modeling to possum morphological data. The analysis uncovers key biological relationships using statistical tests and linear models, transforming messy raw data into reliable, insight-driven results.</p>
+            <div class="proj-chips"><span>Feature Prep</span><span>Regression</span><span>Hypothesis Testing</span></div>
+            <a class="proj-link" href="https://github.com/klifjtumper88/Possum-Morphometrics-Analysis-Cleaning-Hypothesis-Testing-and-Regression-Modeling.git" target="_blank" rel="noreferrer">View on GitHub →</a>
+          </div>
+        </article>
+
+        <article class="proj-card reveal">
+          <div class="thumb"><img src="https://media.istockphoto.com/id/1482734139/vector/report-business-analytics-market-research-concept.jpg?s=612x612&w=0&k=20&c=4WW-XVaeWiAzm3NFKh5hni8KfGXFADYZjstGBdFdDpk=" alt="Project thumbnail"></div>
+          <div class="proj-body">
+            <h3>Project 5: Comprehensive Data Analysis: Cleaning, Insights, and Statistical Findings for Sales & Profitability</h3>
+            <p class="proj-desc">Comprehensive sales and profitability analysis using data cleaning, EDA, statistical testing, and regression modeling.</p>
+            <div class="proj-chips"><span>Modeling</span><span>Evaluation</span><span>Reproducible</span></div>
+            <a class="proj-link" href="https://github.com/klifjtumper88/Comprehensive-Data-Analysis-Cleaning-Insights-and-Statistical-Findings-for-Sales-Profitability.git" target="_blank" rel="noreferrer">View on GitHub →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- CONTACT (ONLY ONE – AT END) -->
+<section id="contact" class="section">
+  <div class="section-head">
+    <h2>Contact</h2>
+    <p>Choose how you’d like to reach me.</p>
+  </div>
+
+  <div class="contact-card surface reveal">
+
+    <div class="contact-item">
+      <div class="contact-left">
+        <div class="contact-icon">✉️</div>
+        <div class="contact-label">Email</div>
+      </div>
+      <a class="contact-link" href="mailto:parthrajguru79@gmail.com">
+        parthrajguru79@gmail.com
+      </a>
+    </div>
+
+    <div class="contact-item">
+      <div class="contact-left">
+        <div class="contact-icon">💻</div>
+        <div class="contact-label">GitHub</div>
+      </div>
+      <a class="contact-link" href="https://github.com/klifjtumper88" target="_blank" rel="noreferrer">
+        github.com/klifjtumper88
+      </a>
+    </div>
+
+    <div class="contact-item">
+      <div class="contact-left">
+        <div class="contact-icon">🔗</div>
+        <div class="contact-label">LinkedIn</div>
+      </div>
+      <a class="contact-link" href="https://www.linkedin.com/in/parth-rajguru/" target="_blank" rel="noreferrer">
+        parth-rajguru
+      </a>
+    </div>
+
+    <div class="contact-note">
+      No forms. No friction. Direct contact only.
+    </div>
+  </div>
+</section>
+
+
+  </main>
+
+  <footer class="footer">
+    © 2025 Parth Chetan Rajguru | Data Analytics Portfolio
+  </footer>
+
+  <script>
+    const items = document.querySelectorAll(".reveal");
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("show"); });
+    }, { threshold: 0.12 });
+    items.forEach(i => obs.observe(i));
+  </script>
+</body>
+</html>
