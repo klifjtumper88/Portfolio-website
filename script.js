@@ -1,3 +1,8 @@
+/* ===============================
+   script.js (FINAL — latest update)
+   Orbit projects + ONE-at-a-time (strict single) + smooth snap
+   =============================== */
+
 document.addEventListener("DOMContentLoaded", () => {
   /* =========================
      REVEAL
@@ -16,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   reveals.forEach((el) => revealObs.observe(el));
 
   /* =========================
-     ORBIT PROJECTS
+     ORBIT PROJECTS (STRICT SINGLE)
      ========================= */
   const orbit = document.querySelector("#orbit");
   const ring = document.querySelector("#orbitRing");
@@ -26,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const N = cards.length;
   const step = 360 / N;
 
-  // radius controls circle size (tweak if you want wider orbit)
+  // orbit size
   const radius = 520;
 
   // place cards on circle
@@ -36,12 +41,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // motion state
-  let angle = 0;           // current rotation
-  let velocity = 0;        // inertia
+  let angle = 0;
+  let velocity = 0;
   let dragging = false;
   let lastX = 0;
-
-  const clamp01 = (x) => Math.max(0, Math.min(1, x));
 
   const stageActive = () => {
     const r = orbit.getBoundingClientRect();
@@ -50,28 +53,21 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const normalizeAngle = (a) => {
-    // keep angle manageable
     a = a % 360;
     if (a < 0) a += 360;
     return a;
   };
 
+  /* =========================
+     STRICT SINGLE: only one card active
+     ========================= */
   const updateDepthClasses = () => {
-    // determine which card is closest to front (0deg)
     const a = normalizeAngle(angle);
-    // front index roughly
-    const frontIndex = Math.round(a / step) % N;
+    const activeIndex = Math.round(a / step) % N;
 
     cards.forEach((c, i) => {
-      c.classList.remove("is-front", "is-side", "is-back");
-      const dist = Math.min(
-        Math.abs(i - frontIndex),
-        N - Math.abs(i - frontIndex)
-      );
-
-      if (dist === 0) c.classList.add("is-front");
-      else if (dist === 1) c.classList.add("is-side");
-      else c.classList.add("is-back");
+      c.classList.remove("is-active");
+      if (i === activeIndex) c.classList.add("is-active");
     });
   };
 
@@ -80,9 +76,32 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDepthClasses();
   };
 
-  // animation loop
+  /* =========================
+     SNAP (premium “lands on card”)
+     ========================= */
+  let snapTimer = null;
+
+  const scheduleSnap = () => {
+    if (snapTimer) clearTimeout(snapTimer);
+
+    snapTimer = setTimeout(() => {
+      const a = normalizeAngle(angle);
+      const target = Math.round(a / step) * step;
+
+      let delta = target - a;
+      if (delta > 180) delta -= 360;
+      if (delta < -180) delta += 360;
+
+      // snap strength
+      velocity += delta * 0.03;
+    }, 140);
+  };
+
+  /* =========================
+     ANIMATION LOOP
+     ========================= */
   const tick = () => {
-    // friction (lower = longer glide)
+    // friction (lower => longer glide)
     velocity *= 0.92;
 
     // deadzone
@@ -90,13 +109,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     angle += velocity;
     render();
-
     requestAnimationFrame(tick);
   };
   tick();
 
   /* =========================
-     INPUT: HORIZONTAL SCROLL
+     INPUT: HORIZONTAL SCROLL ONLY
      ========================= */
   window.addEventListener(
     "wheel",
@@ -108,7 +126,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       e.preventDefault();
 
-      // dx: trackpad horizontal uses deltaX, shift+wheel uses deltaY
       const dx = e.shiftKey ? e.deltaY : e.deltaX;
 
       // sensitivity (smaller = slower, more premium)
@@ -116,12 +133,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // add to velocity for inertial feel
       velocity += dx * sens;
+
+      // snap after user stops
+      scheduleSnap();
     },
     { passive: false }
   );
 
   /* =========================
-     INPUT: DRAG (mouse / touch)
+     INPUT: DRAG (mouse/touch)
      ========================= */
   orbit.addEventListener("pointerdown", (e) => {
     dragging = true;
@@ -131,21 +151,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   orbit.addEventListener("pointermove", (e) => {
     if (!dragging) return;
+
     const dx = e.clientX - lastX;
     lastX = e.clientX;
 
-    // direct rotation while dragging
     const dragSens = 0.22;
     angle -= dx * dragSens;
 
-    // set velocity for release glide
     velocity = -dx * 0.08;
-
     render();
   });
 
   orbit.addEventListener("pointerup", () => {
     dragging = false;
+    scheduleSnap();
   });
 
   /* init */
