@@ -1,8 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
   /* =========================
-     REVEAL
+     WATER REVEAL + FLOAT
      ========================= */
-  const reveals = document.querySelectorAll(".reveal");
+  const reveals = Array.from(document.querySelectorAll(".reveal"));
+
+  // assign stagger delays automatically (so it feels “flowing”)
+  reveals.forEach((el, i) => {
+    el.style.setProperty("--delay", `${i * 70}ms`);
+
+    // alternate float styles for more organic motion
+    if (i % 2 === 0) el.classList.add("floaty");
+    else el.classList.add("floaty2");
+  });
+
   const revealObs = new IntersectionObserver(
     (entries) => {
       entries.forEach((e) => {
@@ -11,16 +21,14 @@ document.addEventListener("DOMContentLoaded", () => {
         revealObs.unobserve(e.target);
       });
     },
-    { threshold: 0.18 }
+    { threshold: 0.16, rootMargin: "0px 0px -10% 0px" }
   );
+
   reveals.forEach((el) => revealObs.observe(el));
 
   /* =========================
      PROJECT SLIDER (TRUE RAIL)
-     - First project always visible (CSS default)
-     - Horizontal: trackpad deltaX or Shift+wheel
-     - Vertical: page scroll stays normal
-     - Drag/swipe supported
+     - FIX CLICK ON LINKS
      ========================= */
   const stage = document.querySelector("#projectStage");
   const rail = document.querySelector("#projectRail");
@@ -37,11 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const updateUI = () => {
     rail.style.transform = `translate3d(${-index * 100}%, 0, 0)`;
-
     if (fill) fill.style.width = `${((index + 1) / N) * 100}%`;
-    if (text) {
-      text.textContent = `${String(index + 1).padStart(2, "0")} / ${String(N).padStart(2, "0")}`;
-    }
+    if (text) text.textContent = `${String(index + 1).padStart(2, "0")} / ${String(N).padStart(2, "0")}`;
   };
 
   // Always start on first project (never blank)
@@ -53,12 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return r.top < mid && r.bottom > mid;
   };
 
-  // Smooth stepping (not too fast)
+  // Wheel: horizontal scroll moves projects, vertical scroll keeps page normal
   let wheelLock = false;
-  const stepTo = (next) => {
-    index = clamp(next, 0, N - 1);
-    updateUI();
-  };
 
   window.addEventListener(
     "wheel",
@@ -66,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!stageActive()) return;
 
       const horizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY) || e.shiftKey;
-      if (!horizontal) return; // vertical stays page scroll
+      if (!horizontal) return;
 
       e.preventDefault();
 
@@ -74,31 +75,41 @@ document.addEventListener("DOMContentLoaded", () => {
       wheelLock = true;
 
       const dx = e.shiftKey ? e.deltaY : e.deltaX;
-
-      // threshold so tiny touch doesn’t flip slides
       const threshold = 14;
 
-      if (dx > threshold) stepTo(index + 1);
-      else if (dx < -threshold) stepTo(index - 1);
+      if (dx > threshold) index = clamp(index + 1, 0, N - 1);
+      else if (dx < -threshold) index = clamp(index - 1, 0, N - 1);
 
-      // lock time controls speed/feel
-      setTimeout(() => (wheelLock = false), 620);
+      updateUI();
+
+      // slower + premium
+      setTimeout(() => (wheelLock = false), 720);
     },
     { passive: false }
   );
 
   /* =========================
-     Drag / Swipe (trackpad-like)
+     Drag / Swipe
+     - DOES NOT STEAL LINK CLICKS
      ========================= */
   let dragging = false;
   let startX = 0;
   let moved = 0;
+  let pointerId = null;
+
+  const isLinkClick = (target) => !!target.closest("a");
 
   stage.addEventListener("pointerdown", (e) => {
+    // If user clicked on a link, DO NOT start drag
+    if (isLinkClick(e.target)) return;
+
     dragging = true;
     startX = e.clientX;
     moved = 0;
-    stage.setPointerCapture(e.pointerId);
+    pointerId = e.pointerId;
+
+    // capture pointer only for non-link interactions
+    stage.setPointerCapture(pointerId);
   });
 
   stage.addEventListener("pointermove", (e) => {
@@ -110,18 +121,21 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!dragging) return;
     dragging = false;
 
-    // swipe threshold
-    const swipe = 80;
-    if (moved < -swipe) stepTo(index + 1);
-    else if (moved > swipe) stepTo(index - 1);
+    const swipe = 85;
+
+    if (moved < -swipe) index = clamp(index + 1, 0, N - 1);
+    else if (moved > swipe) index = clamp(index - 1, 0, N - 1);
+
+    updateUI();
 
     moved = 0;
+    pointerId = null;
   });
 
-  /* Keyboard support (optional, nice for recruiters) */
+  /* Keyboard (nice touch) */
   window.addEventListener("keydown", (e) => {
     if (!stageActive()) return;
-    if (e.key === "ArrowRight") stepTo(index + 1);
-    if (e.key === "ArrowLeft") stepTo(index - 1);
+    if (e.key === "ArrowRight") { index = clamp(index + 1, 0, N - 1); updateUI(); }
+    if (e.key === "ArrowLeft")  { index = clamp(index - 1, 0, N - 1); updateUI(); }
   });
 });
