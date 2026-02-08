@@ -1,5 +1,5 @@
 :root{
-  /* OPTION 1 — Executive Calm (refined, “Apple-clean”) */
+  /* OPTION 1 — Executive Calm */
   --bg: #14110E;        /* warm charcoal */
   --paper: #F6F1EA;     /* soft cream */
   --ink: #1A1511;       /* near-black brown */
@@ -7,10 +7,8 @@
   --gold: #C7A96B;      /* muted gold */
 
   --line: rgba(26,21,17,0.14);
-  --line2: rgba(26,21,17,0.10);
-
   --shadow: 0 18px 44px rgba(20,17,14,0.12);
-  --shadow2: 0 26px 70px rgba(20,17,14,0.16);
+  --shadow2: 0 36px 120px rgba(20,17,14,0.14);
 
   --r1: 18px;
   --r2: 26px;
@@ -267,34 +265,6 @@ body{
   font-weight: 700;
 }
 
-/* scroll hint */
-.scroll-hint{
-  margin-top: 26px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap: 10px;
-  opacity: 0.85;
-}
-.scroll-dot{
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-  background: rgba(199,169,107,0.95);
-  box-shadow: 0 10px 18px rgba(199,169,107,0.28);
-  animation: pulse 1.8s ease-in-out infinite;
-}
-.scroll-text{
-  font-weight: 900;
-  letter-spacing: 1px;
-  font-size: 0.82rem;
-  color: rgba(26,21,17,0.60);
-}
-@keyframes pulse{
-  0%,100%{ transform: translateY(0); opacity: 0.65; }
-  50%{ transform: translateY(-4px); opacity: 1; }
-}
-
 /* WORK */
 .work-grid{
   margin-top: 24px;
@@ -304,7 +274,7 @@ body{
 }
 .work-card{
   padding: 18px;
-  border-radius: var(--r2);
+  border-radius: 26px;
   background: rgba(255,255,255,0.84);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
@@ -346,71 +316,64 @@ body{
   font-size: 0.85rem;
 }
 
-/* ================================
-   PROJECTS (FINAL): HORIZONTAL RAIL
-   ================================ */
-
-#projects{ padding-bottom: 40px; }
-
+/* PROJECTS: TRUE SLIDER */
 .project-stage{
   margin-top: 28px;
   position: sticky;
   top: 86px;
-  height: min(78vh, 680px);
-  border-radius: var(--r2);
+
+  height: min(82vh, 760px);
   overflow: hidden;
+
+  border-radius: 34px;
   background: rgba(255,255,255,0.74);
-  border: 1px solid var(--line);
+  border: 1px solid rgba(26,21,17,0.10);
   box-shadow: var(--shadow2);
 }
 
-/* rail that moves */
 .project-rail{
   height: 100%;
   display: flex;
   flex-direction: row;
-  transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0); /* ALWAYS show first */
   will-change: transform;
-  transition: transform 1200ms cubic-bezier(.2,.9,.2,1);
+  transition: transform 780ms cubic-bezier(.18,.92,.22,1);
 }
 
-/* each slide */
 .project-panel{
   min-width: 100%;
   height: 100%;
+  padding: 18px;
+
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: 18px;
-  padding: 18px;
+  align-items: center;
 }
 
-/* media */
 .project-media{
-  border-radius: var(--r2);
-  overflow:hidden;
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  background: rgba(255,255,255,0.80);
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid rgba(26,21,17,0.10);
+  background: rgba(255,255,255,0.88);
+  box-shadow: 0 22px 70px rgba(20,17,14,0.12);
+  height: min(520px, 60vh);
 }
 .project-media img{
   width: 100%;
   height: 100%;
   object-fit: cover;
   display:block;
-  transform: scale(1.02);
+  transform: scale(1.04);
 }
 
-/* copy */
 .project-copy{
-  padding: 6px 8px;
-  display:flex;
-  flex-direction: column;
-  justify-content: center;
+  padding: 6px 10px;
 }
 .project-meta{
   display:flex;
-  flex-wrap:wrap;
   gap: 8px;
+  flex-wrap: wrap;
 }
 .project-pill{
   padding: 8px 10px;
@@ -422,7 +385,7 @@ body{
 }
 .project-title{
   margin-top: 12px;
-  font-size: 2.05rem;
+  font-size: 2.2rem;
   letter-spacing: -0.02em;
   font-weight: 900;
 }
@@ -436,7 +399,7 @@ body{
 .project-points{
   margin-top: 14px;
   padding-left: 18px;
-  color: rgba(26,21,17,0.82);
+  color: rgba(26,21,17,0.84);
   font-weight: 700;
   line-height: 1.9;
 }
@@ -444,75 +407,64 @@ body{
 
 .project-link{
   margin-top: 16px;
+  display:inline-flex;
   width: fit-content;
   text-decoration:none;
   font-weight: 900;
   padding: 12px 16px;
   border-radius: 999px;
-  background: rgba(199,169,107,0.38);
+  background: rgba(199,169,107,0.40);
   border: 1px solid rgba(199,169,107,0.70);
   color: var(--ink);
-  transition: transform 160ms ease, box-shadow 160ms ease;
   box-shadow: 0 16px 36px rgba(199,169,107,0.18);
+  transition: transform 180ms ease;
 }
-.project-link:hover{
-  transform: translateY(-2px);
-}
+.project-link:hover{ transform: translateY(-2px); }
 
-/* dots */
-/* dots -> bottom progress */
-.project-dots{
+/* progress UI */
+.project-progress{
   position: absolute;
-  left: 50%;
+  left: 18px;
+  right: 18px;
   bottom: 16px;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-  z-index: 10;
 
-  padding: 10px 12px;
-  border-radius: 999px;
-  background: rgba(246,241,234,0.86);
-  border: 1px solid rgba(26,21,17,0.14);
-  box-shadow: 0 14px 30px rgba(20,17,14,0.10);
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events:none;
 }
-
-.dotbtn{
-  width: 26px;          /* pill */
-  height: 8px;
+.project-progress .bar{
+  height: 10px;
   border-radius: 999px;
-  border: 1px solid rgba(26,21,17,0.18);
+  overflow:hidden;
+  flex: 1;
   background: rgba(26,21,17,0.10);
-  cursor: pointer;
-  transition: transform 180ms ease, background 260ms ease, width 260ms ease;
+  border: 1px solid rgba(26,21,17,0.12);
 }
-
-.dotbtn:hover{
-  transform: translateY(-1px);
-}
-
-/* active = longer pill */
-.dotbtn.active{
-  width: 44px;
+.project-progress .fill{
+  display:block;
+  height: 100%;
+  width: 20%;
   background: rgba(199,169,107,0.95);
-  border-color: rgba(199,169,107,0.98);
+  border-radius: 999px;
+  transition: width 520ms cubic-bezier(.18,.92,.22,1);
+}
+.project-progress .count{
+  font-weight: 900;
+  color: rgba(26,21,17,0.70);
+  letter-spacing: 0.6px;
+  font-size: 12px;
+  min-width: 72px;
+  text-align: right;
 }
 
-/* “seen” state */
-.dotbtn.seen{
-  background: rgba(199,169,107,0.38);
-  border-color: rgba(199,169,107,0.40);
+/* runway so sticky stage works */
+.project-track{
+  height: 260vh;
 }
 
-
-/* runway */
-.project-track{ height: 220vh; }
-.track-step{ height: 44vh; }
-
-/* =========================
-   CREDIBILITY + CONTACT
-   ========================= */
-
+/* CREDIBILITY */
 .cred-grid{
   margin-top: 24px;
   display:grid;
@@ -521,7 +473,7 @@ body{
 }
 .cred-card{
   padding: 18px;
-  border-radius: var(--r2);
+  border-radius: 26px;
   background: rgba(255,255,255,0.84);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
@@ -539,7 +491,7 @@ body{
 }
 .cred-card li{ margin-bottom: 6px; }
 
-/* Experience block formatting (if you use xp-block HTML) */
+/* Experience block */
 .xp-block{ margin-top: 12px; }
 .xp-role{ font-weight: 900; }
 .xp-company{ margin-top: 6px; font-weight: 800; color: var(--muted); }
@@ -562,7 +514,7 @@ body{
   text-decoration:none;
   color: inherit;
   padding: 18px;
-  border-radius: var(--r2);
+  border-radius: 26px;
   background: rgba(255,255,255,0.84);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
@@ -620,10 +572,8 @@ body{
   .hero-inner{ grid-template-columns: 1fr; }
   .hero-portrait{ justify-self: start; }
   .work-grid{ grid-template-columns: 1fr 1fr; }
-
   .project-panel{ grid-template-columns: 1fr; }
-  .project-dots{ display:none; }
-
+  .project-media{ height: min(360px, 42vh); }
   .contact-grid{ grid-template-columns: 1fr; }
   .cred-grid{ grid-template-columns: 1fr; }
 }
@@ -633,228 +583,3 @@ body{
   .hero-title{ font-size: 2.35rem; }
   .chapter{ padding: 62px 0; }
 }
-.scroll-hint{ display:none !important; }
-
-/* ============================
-   PROJECT SWIPE FEEL (3D + snap)
-   ============================ */
-
-.project-stage{
-  perspective: 1200px;
-}
-
-.project-rail{
-  transform-style: preserve-3d;
-  transition: transform 900ms cubic-bezier(.18,.92,.22,1); /* slower, premium */
-}
-
-.project-panel{
-  transform-style: preserve-3d;
-}
-
-.project-panel .project-media{
-  transform: translateZ(10px);
-}
-
-.project-panel.is-animating{
-  /* slight “tab change” rotation */
-  animation: tabFlip 900ms cubic-bezier(.18,.92,.22,1);
-}
-
-@keyframes tabFlip{
-  0%   { transform: rotateY(0deg)   scale(1); }
-  35%  { transform: rotateY(-9deg)  scale(0.985); }
-  100% { transform: rotateY(0deg)   scale(1); }
-}
-/* ==========================================
-   PROJECT ORBIT (INFINITE, BORDERLESS, PRO)
-   ========================================== */
-
-.scroll-hint{ display:none !important; } /* removes dancing scroll hint */
-
-/* remove any debug badge */
-body::before{ content:none !important; }
-
-/* borderless stage */
-.orbit-stage{
-  margin-top: 28px;
-  position: sticky;
-  top: 86px;
-  height: min(78vh, 720px);
-  border-radius: 0;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  overflow: visible;
-}
-
-/* small HUD */
-.orbit-hud{
-  position: absolute;
-  inset: auto 0 14px 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 18px;
-  pointer-events: none;
-  z-index: 3;
-}
-.hud-pill{
-  display: inline-flex;
-  padding: 9px 12px;
-  border-radius: 999px;
-  background: rgba(246,241,234,0.86);
-  border: 1px solid rgba(26,21,17,0.14);
-  color: rgba(26,21,17,0.72);
-  font-weight: 900;
-  font-size: 12px;
-  letter-spacing: 0.5px;
-  box-shadow: 0 14px 30px rgba(20,17,14,0.10);
-}
-.hud-left{ display:flex; gap:10px; }
-.hud-right{ display:flex; gap:10px; }
-
-/* orbit space */
-.orbit{
-  height: 100%;
-  display: grid;
-  place-items: center;
-  perspective: 1400px;
-  perspective-origin: 50% 45%;
-}
-
-/* ring rotates forever */
-.orbit-ring{
-  width: min(980px, 100%);
-  height: min(520px, 100%);
-  position: relative;
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-
-/* each planet/card */
-.orbit-card{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: min(420px, 92vw);
-  transform-style: preserve-3d;
-  transform-origin: center center;
-  border-radius: 28px;
-
-  background: rgba(255,255,255,0.86);
-  border: 1px solid rgba(26,21,17,0.12);
-  box-shadow: 0 28px 80px rgba(20,17,14,0.14);
-  overflow: hidden;
-  translate: -50% -50%;
-  transition: filter 280ms ease, opacity 280ms ease;
-}
-
-.orbit-media{
-  height: 200px;
-  overflow: hidden;
-  background: rgba(255,255,255,0.8);
-}
-.orbit-media img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.06);
-}
-
-.orbit-copy{
-  padding: 16px 16px 18px 16px;
-}
-.orbit-kicker{
-  font-weight: 900;
-  letter-spacing: 1.8px;
-  font-size: 12px;
-  color: rgba(26,21,17,0.58);
-}
-.orbit-copy h3{
-  margin-top: 8px;
-  font-size: 1.18rem;
-  font-weight: 900;
-}
-.orbit-copy p{
-  margin-top: 8px;
-  color: var(--muted);
-  font-weight: 700;
-  line-height: 1.75;
-}
-.orbit-copy ul{
-  margin-top: 10px;
-  padding-left: 18px;
-  line-height: 1.8;
-  font-weight: 700;
-  color: rgba(26,21,17,0.84);
-}
-.orbit-copy li{ margin-bottom: 6px; }
-
-.orbit-link{
-  margin-top: 12px;
-  display: inline-flex;
-  padding: 12px 16px;
-  border-radius: 999px;
-  text-decoration: none;
-  font-weight: 900;
-  color: var(--ink);
-  background: rgba(199,169,107,0.40);
-  border: 1px solid rgba(199,169,107,0.70);
-  box-shadow: 0 16px 36px rgba(199,169,107,0.18);
-  transition: transform 180ms ease;
-}
-.orbit-link:hover{ transform: translateY(-2px); }
-
-/* depth cue: front card looks crisp */
-.orbit-card.is-front{
-  filter: none;
-  opacity: 1;
-}
-
-/* sides slightly soften */
-.orbit-card.is-side{
-  filter: saturate(0.92) contrast(0.98);
-  opacity: 0.92;
-}
-
-/* far cards dim a bit */
-.orbit-card.is-back{
-  filter: saturate(0.88) contrast(0.96);
-  opacity: 0.82;
-}
-
-/* mobile */
-@media (max-width: 980px){
-  .orbit-ring{ height: 620px; }
-  .orbit-media{ height: 180px; }
-  .orbit-stage{ top: 74px; }
-  .orbit-hud{ display:none; }
-}
-/* ==========================================
-   ORBIT: STRICT SINGLE (only one visible)
-   ========================================== */
-
-/* hide all by default */
-.orbit-card{
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transform: translate(-50%, -50%) scale(0.995) !important;
-}
-
-/* show only active */
-.orbit-card.is-active{
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  transform: translate(-50%, -50%) scale(1.02) !important;
-  z-index: 10 !important;
-  transition: opacity 520ms cubic-bezier(.18,.92,.22,1),
-              transform 520ms cubic-bezier(.18,.92,.22,1) !important;
-}
-
-/* make stage feel like a focused frame */
-.orbit-stage{
-  background: rgba(255,255,255,0.74) !important;
-}
-
-
