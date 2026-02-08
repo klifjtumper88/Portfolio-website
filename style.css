@@ -346,41 +346,42 @@ body{
   font-size: 0.85rem;
 }
 
-/* PROJECTS — Apple-like Stage */
-.project-stage{
-  position: relative;
-  margin-top: 28px;
-  border-radius: var(--r2);
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,0.70);
-  box-shadow: var(--shadow2);
-  overflow: hidden;
+/* ================================
+   PROJECTS (FINAL): HORIZONTAL RAIL
+   ================================ */
 
-  /* sticky feel with scroll track */
+#projects{ padding-bottom: 40px; }
+
+.project-stage{
+  margin-top: 28px;
   position: sticky;
   top: 86px;
-  height: min(74vh, 640px);
-  display: grid;
-  place-items: stretch;
+  height: min(78vh, 680px);
+  border-radius: var(--r2);
+  overflow: hidden;
+  background: rgba(255,255,255,0.74);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow2);
 }
 
-/* panels stack and crossfade */
+/* rail that moves */
+.project-rail{
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  transform: translate3d(0,0,0);
+  will-change: transform;
+  transition: transform 420ms cubic-bezier(.2,.9,.2,1);
+}
+
+/* each slide */
 .project-panel{
-  position: absolute;
-  inset: 0;
-  display:grid;
+  min-width: 100%;
+  height: 100%;
+  display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: 18px;
   padding: 18px;
-  opacity: 0;
-  transform: translateY(14px) scale(0.995);
-  transition: opacity 520ms ease, transform 520ms ease;
-  pointer-events: none;
-}
-.project-panel.is-active{
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  pointer-events: auto;
 }
 
 /* media */
@@ -458,15 +459,15 @@ body{
   transform: translateY(-2px);
 }
 
-/* dots (JS fills) */
+/* dots */
 .project-dots{
   position: absolute;
   right: 14px;
   top: 50%;
   transform: translateY(-50%);
-  display:grid;
+  display: grid;
   gap: 10px;
-  z-index: 5;
+  z-index: 10;
 }
 .dotbtn{
   width: 10px;
@@ -474,7 +475,7 @@ body{
   border-radius: 999px;
   border: 1px solid rgba(26,21,17,0.40);
   background: rgba(246,241,234,0.92);
-  cursor:pointer;
+  cursor: pointer;
   transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
 }
 .dotbtn:hover{
@@ -486,15 +487,14 @@ body{
   border-color: rgba(199,169,107,0.98);
 }
 
-/* project track creates scroll space */
-.project-track{
-  height: 420vh; /* 5 projects = enough scroll distance */
-}
+/* runway */
+.project-track{ height: 220vh; }
+.track-step{ height: 44vh; }
 
-/* track steps exist for JS markers */
-.track-step{ height: 80vh; }
+/* =========================
+   CREDIBILITY + CONTACT
+   ========================= */
 
-/* CREDIBILITY */
 .cred-grid{
   margin-top: 24px;
   display:grid;
@@ -520,6 +520,18 @@ body{
   font-weight: 700;
 }
 .cred-card li{ margin-bottom: 6px; }
+
+/* Experience block formatting (if you use xp-block HTML) */
+.xp-block{ margin-top: 12px; }
+.xp-role{ font-weight: 900; }
+.xp-company{ margin-top: 6px; font-weight: 800; color: var(--muted); }
+.xp-list{
+  margin-top: 10px;
+  padding-left: 18px;
+  color: rgba(26,21,17,0.84);
+  line-height: 1.9;
+  font-weight: 700;
+}
 
 /* CONTACT */
 .contact-grid{
@@ -590,11 +602,12 @@ body{
   .hero-inner{ grid-template-columns: 1fr; }
   .hero-portrait{ justify-self: start; }
   .work-grid{ grid-template-columns: 1fr 1fr; }
+
   .project-panel{ grid-template-columns: 1fr; }
-  .project-stage{ height: min(78vh, 720px); }
+  .project-dots{ display:none; }
+
   .contact-grid{ grid-template-columns: 1fr; }
   .cred-grid{ grid-template-columns: 1fr; }
-  .project-dots{ display:none; }
 }
 
 @media (max-width: 720px){
@@ -602,102 +615,19 @@ body{
   .hero-title{ font-size: 2.35rem; }
   .chapter{ padding: 62px 0; }
 }
-/* Experience block formatting */
-.xp-block{ margin-top: 12px; }
-.xp-role{ font-weight: 900; }
-.xp-company{ margin-top: 6px; font-weight: 800; color: var(--muted); }
-.xp-list{
-  margin-top: 10px;
-  padding-left: 18px;
-  color: rgba(26,21,17,0.84);
-  line-height: 1.9;
-  font-weight: 700;
-}
-/* Make sure the Projects chapter has enough scroll runway */
-#projects{
-  padding-bottom: 40px;
-}
 
-/* Track should exist and create scroll space */
-.project-track{
-  height: 520vh;   /* more runway so changes always trigger */
-  position: relative;
-}
-
-/* Each step defines a clean switching zone */
-.track-step{
-  height: 100vh;
-}
-
-/* Add a subtle “Scroll to change projects” helper */
-.project-stage::after{
-  content: "Scroll to explore projects";
-  position: absolute;
-  left: 18px;
-  bottom: 14px;
-  padding: 8px 12px;
+/* DEBUG badge (remove later) */
+body::before{
+  content:"CSS OK";
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+  padding: 6px 10px;
   border-radius: 999px;
-  background: rgba(246,241,234,0.86);
-  border: 1px solid rgba(26,21,17,0.16);
-  color: rgba(26,21,17,0.65);
   font-weight: 900;
-  font-size: 0.78rem;
-  letter-spacing: 0.6px;
+  font-size: 12px;
+  background: rgba(199,169,107,0.35);
+  border: 1px solid rgba(199,169,107,0.75);
+  color: #1A1511;
+  z-index: 9999;
 }
-/* remove helper label */
-.project-stage::after{ content: none !important; }
-
-/* ============================
-   PROJECTS: HORIZONTAL RAIL
-   ============================ */
-
-/* stage stays sticky and becomes a viewport window */
-.project-stage{
-  position: sticky;
-  top: 86px;
-  height: min(78vh, 680px);
-  border-radius: var(--r2);
-  overflow: hidden;
-}
-
-/* turn the stage into a horizontal track */
-.project-stage{
-  display: block; /* override grid */
-}
-
-/* panels become slides */
-.project-panel{
-  position: relative; /* no absolute stacking */
-  inset: auto;
-  opacity: 1;         /* visible */
-  transform: none;
-  pointer-events: auto;
-
-  min-width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 18px;
-  padding: 18px;
-}
-
-/* horizontal scroller */
-.project-rail{
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  will-change: transform;
-  transform: translate3d(0,0,0);
-  transition: transform 420ms cubic-bezier(.2,.9,.2,1);
-}
-
-/* keep dots */
-.project-dots{
-  position: absolute;
-  right: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-}
-
-
