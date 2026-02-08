@@ -16,71 +16,87 @@ document.addEventListener("DOMContentLoaded", () => {
   reveals.forEach((el) => revealObs.observe(el));
 
   /* =========================
-     PROJECTS – HORIZONTAL SNAP + TAB-FLIP
+     ORBIT PROJECTS
      ========================= */
-  const stage = document.querySelector(".project-stage");
-  const rail = document.querySelector(".project-rail");
-  const panels = Array.from(document.querySelectorAll(".project-panel"));
-  const dotsWrap = document.querySelector(".project-dots");
+  const orbit = document.querySelector("#orbit");
+  const ring = document.querySelector("#orbitRing");
+  const cards = Array.from(document.querySelectorAll(".orbit-card"));
+  if (!orbit || !ring || cards.length === 0) return;
 
-  if (!stage || !rail || panels.length === 0 || !dotsWrap) return;
+  const N = cards.length;
+  const step = 360 / N;
 
-  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  // radius controls circle size (tweak if you want wider orbit)
+  const radius = 520;
 
-  let index = 0;
-  let locked = false;
+  // place cards on circle
+  cards.forEach((card, i) => {
+    const a = i * step;
+    card.style.transform = `translate(-50%, -50%) rotateY(${a}deg) translateZ(${radius}px)`;
+  });
 
-  /* ---------- stage active ---------- */
+  // motion state
+  let angle = 0;           // current rotation
+  let velocity = 0;        // inertia
+  let dragging = false;
+  let lastX = 0;
+
+  const clamp01 = (x) => Math.max(0, Math.min(1, x));
+
   const stageActive = () => {
-    const r = stage.getBoundingClientRect();
+    const r = orbit.getBoundingClientRect();
     const mid = window.innerHeight * 0.55;
     return r.top < mid && r.bottom > mid;
   };
 
-  /* ---------- dots ---------- */
-  dotsWrap.innerHTML = "";
-  const dots = panels.map((_, i) => {
-    const b = document.createElement("button");
-    b.className = "dotbtn";
-    b.type = "button";
-    b.setAttribute("aria-label", `Project ${i + 1}`);
-    b.addEventListener("click", () => goTo(i));
-    dotsWrap.appendChild(b);
-    return b;
-  });
+  const normalizeAngle = (a) => {
+    // keep angle manageable
+    a = a % 360;
+    if (a < 0) a += 360;
+    return a;
+  };
 
-  const setDots = () => {
-    dots.forEach((d, di) => {
-      d.classList.toggle("active", di === index);
-      d.classList.toggle("seen", di < index);
+  const updateDepthClasses = () => {
+    // determine which card is closest to front (0deg)
+    const a = normalizeAngle(angle);
+    // front index roughly
+    const frontIndex = Math.round(a / step) % N;
+
+    cards.forEach((c, i) => {
+      c.classList.remove("is-front", "is-side", "is-back");
+      const dist = Math.min(
+        Math.abs(i - frontIndex),
+        N - Math.abs(i - frontIndex)
+      );
+
+      if (dist === 0) c.classList.add("is-front");
+      else if (dist === 1) c.classList.add("is-side");
+      else c.classList.add("is-back");
     });
   };
 
-  const animatePanel = () => {
-    const p = panels[index];
-    p.classList.remove("is-animating");
-    // restart animation reliably
-    void p.offsetWidth;
-    p.classList.add("is-animating");
-  };
-
   const render = () => {
-    rail.style.transform = `translate3d(${-index * 100}%,0,0)`;
-    setDots();
-    animatePanel();
+    ring.style.transform = `rotateY(${-angle}deg)`;
+    updateDepthClasses();
   };
 
-  const goTo = (i) => {
-    index = clamp(i, 0, panels.length - 1);
+  // animation loop
+  const tick = () => {
+    // friction (lower = longer glide)
+    velocity *= 0.92;
+
+    // deadzone
+    if (Math.abs(velocity) < 0.0006) velocity = 0;
+
+    angle += velocity;
     render();
-  };
 
-  render();
+    requestAnimationFrame(tick);
+  };
+  tick();
 
   /* =========================
-     HORIZONTAL INPUT ONLY
-     - vertical scroll: do nothing (page scrolls)
-     - horizontal scroll: snap projects
+     INPUT: HORIZONTAL SCROLL
      ========================= */
   window.addEventListener(
     "wheel",
@@ -88,68 +104,50 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!stageActive()) return;
 
       const horizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY) || e.shiftKey;
-      if (!horizontal) return;
+      if (!horizontal) return; // vertical scroll stays vertical
 
-      // We handle horizontal only
       e.preventDefault();
-      if (locked) return;
-      locked = true;
 
+      // dx: trackpad horizontal uses deltaX, shift+wheel uses deltaY
       const dx = e.shiftKey ? e.deltaY : e.deltaX;
 
-      // snap threshold
-      if (dx > 0) goTo(index + 1);
-      else goTo(index - 1);
+      // sensitivity (smaller = slower, more premium)
+      const sens = 0.035;
 
-      // slow, deliberate cooldown
-      setTimeout(() => (locked = false), 950);
+      // add to velocity for inertial feel
+      velocity += dx * sens;
     },
     { passive: false }
   );
 
-  /* ---------- keyboard (optional) ---------- */
-  window.addEventListener("keydown", (e) => {
-    if (!stageActive()) return;
-    if (locked) return;
-
-    if (e.key === "ArrowRight") {
-      locked = true;
-      goTo(index + 1);
-      setTimeout(() => (locked = false), 950);
-    }
-    if (e.key === "ArrowLeft") {
-      locked = true;
-      goTo(index - 1);
-      setTimeout(() => (locked = false), 950);
-    }
-  });
-
-  /* ---------- swipe drag (trackpad-like fallback) ---------- */
-  let dragging = false;
-  let startX = 0;
-  let moved = 0;
-
-  stage.addEventListener("pointerdown", (e) => {
+  /* =========================
+     INPUT: DRAG (mouse / touch)
+     ========================= */
+  orbit.addEventListener("pointerdown", (e) => {
     dragging = true;
-    startX = e.clientX;
-    moved = 0;
-    stage.setPointerCapture(e.pointerId);
+    lastX = e.clientX;
+    orbit.setPointerCapture(e.pointerId);
   });
 
-  stage.addEventListener("pointermove", (e) => {
+  orbit.addEventListener("pointermove", (e) => {
     if (!dragging) return;
-    moved = e.clientX - startX;
+    const dx = e.clientX - lastX;
+    lastX = e.clientX;
+
+    // direct rotation while dragging
+    const dragSens = 0.22;
+    angle -= dx * dragSens;
+
+    // set velocity for release glide
+    velocity = -dx * 0.08;
+
+    render();
   });
 
-  stage.addEventListener("pointerup", () => {
-    if (!dragging) return;
+  orbit.addEventListener("pointerup", () => {
     dragging = false;
-
-    if (Math.abs(moved) > 70) {
-      if (moved < 0) goTo(index + 1);
-      else goTo(index - 1);
-    }
   });
 
-  window.addEventListener("resize", () => render());
+  /* init */
+  render();
 });
