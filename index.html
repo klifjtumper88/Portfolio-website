@@ -343,12 +343,6 @@
   </footer>
 
   <!-- keep using inline JS for now; we'll replace in Step 3 after CSS is perfect -->
-  <script>
-    const items = document.querySelectorAll(".reveal");
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("show"); });
-    }, { threshold: 0.12 });
-    items.forEach(i => obs.observe(i));
-  </script>
+  <script src="./script.js"></script>
 </body>
 </html>
