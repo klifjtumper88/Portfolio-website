@@ -676,20 +676,20 @@ body{
 
 /* MAIN FLOAT (cards, project panels) */
 .reveal.floaty.show{
-  animation: float-main 10s ease-in-out infinite;
+  animation: float-main 5s ease-in-out infinite;
   animation-delay: calc(var(--delay, 0ms) + 900ms);
 }
 
 /* SOFT FLOAT (text blocks, paragraphs) */
 .reveal.floaty2.show{
-  animation: float-soft 15s ease-in-out infinite;
+  animation: float-soft 7s ease-in-out infinite;
   animation-delay: calc(var(--delay, 0ms) + 1100ms);
 }
 
 /* SLOW FLOAT (hero image, large media) */
 .hero-portrait.reveal.show,
 .project-media{
-  animation: float-slow 15s ease-in-out infinite;
+  animation: float-slow 7s ease-in-out infinite;
   animation-delay: 1.2s;
 }
 
