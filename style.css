@@ -460,32 +460,50 @@ body{
 }
 
 /* dots */
+/* dots -> bottom progress */
 .project-dots{
   position: absolute;
-  right: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: grid;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  display: flex;
   gap: 10px;
   z-index: 10;
-}
-.dotbtn{
-  width: 10px;
-  height: 10px;
+
+  padding: 10px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(26,21,17,0.40);
-  background: rgba(246,241,234,0.92);
+  background: rgba(246,241,234,0.86);
+  border: 1px solid rgba(26,21,17,0.14);
+  box-shadow: 0 14px 30px rgba(20,17,14,0.10);
+}
+
+.dotbtn{
+  width: 26px;          /* pill */
+  height: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(26,21,17,0.18);
+  background: rgba(26,21,17,0.10);
   cursor: pointer;
-  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+  transition: transform 180ms ease, background 260ms ease, width 260ms ease;
 }
+
 .dotbtn:hover{
-  transform: scale(1.18);
-  border-color: rgba(199,169,107,0.85);
+  transform: translateY(-1px);
 }
+
+/* active = longer pill */
 .dotbtn.active{
+  width: 44px;
   background: rgba(199,169,107,0.95);
   border-color: rgba(199,169,107,0.98);
 }
+
+/* “seen” state */
+.dotbtn.seen{
+  background: rgba(199,169,107,0.38);
+  border-color: rgba(199,169,107,0.40);
+}
+
 
 /* runway */
 .project-track{ height: 220vh; }
