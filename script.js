@@ -1,41 +1,26 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // 1) PROJECTS observer (strong Apple-like slide)
-  const projectCards = document.querySelectorAll(".projects .proj-card.reveal");
+  const items = document.querySelectorAll(".reveal");
 
-  projectCards.forEach((el, idx) => {
-    // Subtle stagger only for projects
-    el.style.transitionDelay = `${Math.min(idx * 70, 280)}ms`;
+  // Subtle stagger (premium feel, not flashy)
+  items.forEach((el, idx) => {
+    const delay = Math.min(idx * 55, 260); // cap delay so it doesn't feel slow
+    el.style.transitionDelay = `${delay}ms`;
   });
 
-  const projObs = new IntersectionObserver(
+  const observer = new IntersectionObserver(
     (entries) => {
-      entries.forEach((e) => {
-        if (!e.isIntersecting) return;
-        e.target.classList.add("show");
-        projObs.unobserve(e.target);
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        entry.target.classList.add("show");
+        observer.unobserve(entry.target); // animate once for professionalism
       });
     },
     {
-      threshold: 0.22,
-      rootMargin: "0px 0px -10% 0px",
+      threshold: 0.16,
+      rootMargin: "0px 0px -8% 0px",
     }
   );
 
-  projectCards.forEach((el) => projObs.observe(el));
-
-  // 2) GENERAL reveal observer (for other sections)
-  const otherReveals = document.querySelectorAll(".reveal:not(.proj-card)");
-
-  const genObs = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((e) => {
-        if (!e.isIntersecting) return;
-        e.target.classList.add("show");
-        genObs.unobserve(e.target);
-      });
-    },
-    { threshold: 0.15 }
-  );
-
-  otherReveals.forEach((el) => genObs.observe(el));
+  items.forEach((el) => observer.observe(el));
 });
