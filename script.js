@@ -56,23 +56,20 @@ document.addEventListener("DOMContentLoaded", () => {
   setActive(0);
 
   // When a step enters view, switch project
-  const stepObs = new IntersectionObserver(
-    (entries) => {
-      // pick the most visible entry
-      const visible = entries
-        .filter((e) => e.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-
-      if (!visible) return;
-
-      const idx = Number(visible.target.dataset.step || "0");
+ const stepObs = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const idx = Number(e.target.dataset.step || "0");
       if (Number.isFinite(idx)) setActive(idx);
-    },
-    {
-      threshold: [0.35, 0.55, 0.75],
-      rootMargin: "-10% 0px -55% 0px",
-    }
-  );
+    });
+  },
+  {
+    threshold: 0.6,
+    rootMargin: "0px 0px -35% 0px",
+  }
+);
+
 
   steps.forEach((s) => stepObs.observe(s));
 
