@@ -1,8 +1,3 @@
-/* ===============================
-   script.js (FINAL — latest update)
-   Orbit projects + ONE-at-a-time (strict single) + smooth snap
-   =============================== */
-
 document.addEventListener("DOMContentLoaded", () => {
   /* =========================
      REVEAL
@@ -21,152 +16,112 @@ document.addEventListener("DOMContentLoaded", () => {
   reveals.forEach((el) => revealObs.observe(el));
 
   /* =========================
-     ORBIT PROJECTS (STRICT SINGLE)
+     PROJECT SLIDER (TRUE RAIL)
+     - First project always visible (CSS default)
+     - Horizontal: trackpad deltaX or Shift+wheel
+     - Vertical: page scroll stays normal
+     - Drag/swipe supported
      ========================= */
-  const orbit = document.querySelector("#orbit");
-  const ring = document.querySelector("#orbitRing");
-  const cards = Array.from(document.querySelectorAll(".orbit-card"));
-  if (!orbit || !ring || cards.length === 0) return;
+  const stage = document.querySelector("#projectStage");
+  const rail = document.querySelector("#projectRail");
+  const panels = Array.from(document.querySelectorAll(".project-panel"));
+  const fill = document.querySelector("#progressFill");
+  const text = document.querySelector("#progressText");
 
-  const N = cards.length;
-  const step = 360 / N;
+  if (!stage || !rail || panels.length === 0) return;
 
-  // orbit size
-  const radius = 520;
+  const N = panels.length;
+  let index = 0;
 
-  // place cards on circle
-  cards.forEach((card, i) => {
-    const a = i * step;
-    card.style.transform = `translate(-50%, -50%) rotateY(${a}deg) translateZ(${radius}px)`;
-  });
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
-  // motion state
-  let angle = 0;
-  let velocity = 0;
-  let dragging = false;
-  let lastX = 0;
+  const updateUI = () => {
+    rail.style.transform = `translate3d(${-index * 100}%, 0, 0)`;
+
+    if (fill) fill.style.width = `${((index + 1) / N) * 100}%`;
+    if (text) {
+      text.textContent = `${String(index + 1).padStart(2, "0")} / ${String(N).padStart(2, "0")}`;
+    }
+  };
+
+  // Always start on first project (never blank)
+  updateUI();
 
   const stageActive = () => {
-    const r = orbit.getBoundingClientRect();
+    const r = stage.getBoundingClientRect();
     const mid = window.innerHeight * 0.55;
     return r.top < mid && r.bottom > mid;
   };
 
-  const normalizeAngle = (a) => {
-    a = a % 360;
-    if (a < 0) a += 360;
-    return a;
+  // Smooth stepping (not too fast)
+  let wheelLock = false;
+  const stepTo = (next) => {
+    index = clamp(next, 0, N - 1);
+    updateUI();
   };
 
-  /* =========================
-     STRICT SINGLE: only one card active
-     ========================= */
-  const updateDepthClasses = () => {
-    const a = normalizeAngle(angle);
-    const activeIndex = Math.round(a / step) % N;
-
-    cards.forEach((c, i) => {
-      c.classList.remove("is-active");
-      if (i === activeIndex) c.classList.add("is-active");
-    });
-  };
-
-  const render = () => {
-    ring.style.transform = `rotateY(${-angle}deg)`;
-    updateDepthClasses();
-  };
-
-  /* =========================
-     SNAP (premium “lands on card”)
-     ========================= */
-  let snapTimer = null;
-
-  const scheduleSnap = () => {
-    if (snapTimer) clearTimeout(snapTimer);
-
-    snapTimer = setTimeout(() => {
-      const a = normalizeAngle(angle);
-      const target = Math.round(a / step) * step;
-
-      let delta = target - a;
-      if (delta > 180) delta -= 360;
-      if (delta < -180) delta += 360;
-
-      // snap strength
-      velocity += delta * 0.03;
-    }, 140);
-  };
-
-  /* =========================
-     ANIMATION LOOP
-     ========================= */
-  const tick = () => {
-    // friction (lower => longer glide)
-    velocity *= 0.92;
-
-    // deadzone
-    if (Math.abs(velocity) < 0.0006) velocity = 0;
-
-    angle += velocity;
-    render();
-    requestAnimationFrame(tick);
-  };
-  tick();
-
-  /* =========================
-     INPUT: HORIZONTAL SCROLL ONLY
-     ========================= */
   window.addEventListener(
     "wheel",
     (e) => {
       if (!stageActive()) return;
 
       const horizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY) || e.shiftKey;
-      if (!horizontal) return; // vertical scroll stays vertical
+      if (!horizontal) return; // vertical stays page scroll
 
       e.preventDefault();
 
+      if (wheelLock) return;
+      wheelLock = true;
+
       const dx = e.shiftKey ? e.deltaY : e.deltaX;
 
-      // sensitivity (smaller = slower, more premium)
-      const sens = 0.035;
+      // threshold so tiny touch doesn’t flip slides
+      const threshold = 14;
 
-      // add to velocity for inertial feel
-      velocity += dx * sens;
+      if (dx > threshold) stepTo(index + 1);
+      else if (dx < -threshold) stepTo(index - 1);
 
-      // snap after user stops
-      scheduleSnap();
+      // lock time controls speed/feel
+      setTimeout(() => (wheelLock = false), 620);
     },
     { passive: false }
   );
 
   /* =========================
-     INPUT: DRAG (mouse/touch)
+     Drag / Swipe (trackpad-like)
      ========================= */
-  orbit.addEventListener("pointerdown", (e) => {
+  let dragging = false;
+  let startX = 0;
+  let moved = 0;
+
+  stage.addEventListener("pointerdown", (e) => {
     dragging = true;
-    lastX = e.clientX;
-    orbit.setPointerCapture(e.pointerId);
+    startX = e.clientX;
+    moved = 0;
+    stage.setPointerCapture(e.pointerId);
   });
 
-  orbit.addEventListener("pointermove", (e) => {
+  stage.addEventListener("pointermove", (e) => {
     if (!dragging) return;
-
-    const dx = e.clientX - lastX;
-    lastX = e.clientX;
-
-    const dragSens = 0.22;
-    angle -= dx * dragSens;
-
-    velocity = -dx * 0.08;
-    render();
+    moved = e.clientX - startX;
   });
 
-  orbit.addEventListener("pointerup", () => {
+  stage.addEventListener("pointerup", () => {
+    if (!dragging) return;
     dragging = false;
-    scheduleSnap();
+
+    // swipe threshold
+    const swipe = 80;
+    if (moved < -swipe) stepTo(index + 1);
+    else if (moved > swipe) stepTo(index - 1);
+
+    moved = 0;
   });
 
-  /* init */
-  render();
+  /* Keyboard support (optional, nice for recruiters) */
+  window.addEventListener("keydown", (e) => {
+    if (!stageActive()) return;
+    if (e.key === "ArrowRight") stepTo(index + 1);
+    if (e.key === "ArrowLeft") stepTo(index - 1);
+  });
 });
