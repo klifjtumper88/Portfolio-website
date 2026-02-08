@@ -39,18 +39,6 @@
     <!-- HERO -->
     <section class="hero">
       <div class="hero-top reveal show">
-        <div class="hero-photo interactive">
-          <!-- Put your photo in repo as: hero-photo.jpg -->
-          <img src="./parth.jpg" alt="Parth Rajguru"
-               onerror="this.style.display='none'; document.querySelector('.photo-fallback').style.display='grid';" />
-          <div class="photo-fallback" style="display:none;">
-            <div>
-              <div class="fallback-title">Add your photo</div>
-              <div class="fallback-sub">hero-photo.jpg</div>
-            </div>
-          </div>
-        </div>
-
         <p class="kicker">DATA ANALYTICS PORTFOLIO</p>
         <h1 class="hero-title">Parth Chetan Rajguru</h1>
         <p class="hero-headline">EDA & Regression Modeling (scikit-learn)</p>
@@ -113,16 +101,61 @@
 
     <div class="divider"></div>
 
+    <!-- ABOUT (newspaper-style image + content wrap) -->
+    <section id="about" class="section">
+      <div class="section-head">
+        <h2>About</h2>
+        <p>
+          Exploratory Data Analysis is the most time-consuming and underestimated part of analytics.
+          I specialize in handling this phase end-to-end, turning raw datasets into clean data and clear insights.
+        </p>
+      </div>
+
+      <div class="about-wrap surface interactive reveal">
+        <div class="portrait-float">
+          <img src="./parth.jpg" alt="Parth Rajguru"
+               onerror="this.style.display='none'; document.querySelector('.photo-fallback').style.display='grid';" />
+          <div class="photo-fallback" style="display:none;">
+            <div>
+              <div class="fallback-title">Add your photo</div>
+              <div class="fallback-sub">parth.jpg</div>
+            </div>
+          </div>
+        </div>
+
+        <p class="about-big">I do Exploratory Data Analysis so you don’t have to.</p>
+
+        <p>
+          I specialize in handling this phase end-to-end, turning raw datasets into clean data and clear insights.
+        </p>
+
+        <p>
+          Structured notebooks, clear visuals, regression baselines (MAE/RMSE/R²), and plain-English explanation.
+        </p>
+
+        <div class="about-pills">
+          <span class="pill">EDA</span>
+          <span class="pill">Clean + Visual</span>
+          <span class="pill">Regression</span>
+          <span class="pill">Business Insights</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
     <!-- WHAT I DO -->
     <section id="services" class="section">
       <div class="section-head">
         <h2>What I Do</h2>
-        <p>Exploratory Data Analysis is the most time-consuming and underestimated part of analytics.
-I specialize in handling this phase end-to-end, turning raw datasets into clean data and clear insights.</p>
+        <p>
+          Exploratory Data Analysis is the most time-consuming and underestimated part of analytics.
+          I specialize in handling this phase end-to-end, turning raw datasets into clean data and clear insights.
+        </p>
       </div>
 
       <div class="services">
-        <article class="service-card surface interactive reveal">
+        <article class="service-card surface interactive reveal reveal-left">
           <div class="service-top">
             <div class="service-icon">📌</div>
             <h3>Exploratory Data Analysis (EDA)</h3>
@@ -150,7 +183,7 @@ I specialize in handling this phase end-to-end, turning raw datasets into clean 
           <div class="service-outcome">Outcome: decisions supported by visuals.</div>
         </article>
 
-        <article class="service-card surface interactive reveal">
+        <article class="service-card surface interactive reveal reveal-right">
           <div class="service-top">
             <div class="service-icon">🧮</div>
             <h3>Regression Modeling</h3>
@@ -176,7 +209,7 @@ I specialize in handling this phase end-to-end, turning raw datasets into clean 
       </div>
 
       <div class="skills-grid">
-        <div class="panel surface interactive reveal">
+        <div class="panel surface interactive reveal reveal-left">
           <h3 class="panel-title">Tools</h3>
           <div class="chips">
             <span>Python</span><span>Pandas</span><span>NumPy</span>
@@ -185,7 +218,7 @@ I specialize in handling this phase end-to-end, turning raw datasets into clean 
           </div>
         </div>
 
-        <div class="panel surface interactive reveal">
+        <div class="panel surface interactive reveal reveal-right">
           <h3 class="panel-title">Methods</h3>
           <div class="chips">
             <span>Cleaning</span><span>Outliers (IQR)</span><span>Feature Prep</span>
@@ -205,7 +238,7 @@ I specialize in handling this phase end-to-end, turning raw datasets into clean 
       </div>
 
       <div class="projects">
-        <article class="proj-card reveal">
+        <article class="proj-card reveal reveal-left">
           <div class="thumb"><img src="https://plus.unsplash.com/premium_photo-1733317391601-b1651d6d4be9?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Project thumbnail"></div>
           <div class="proj-body">
             <h3>Project 1: EDA Case Study</h3>
@@ -215,7 +248,7 @@ I specialize in handling this phase end-to-end, turning raw datasets into clean 
           </div>
         </article>
 
-        <article class="proj-card reveal">
+        <article class="proj-card reveal reveal-right">
           <div class="thumb"><img src="https://www.purebookkeeping.com/hubfs/images/blog/pb-blog/sales-forecast.png" alt="Project thumbnail"></div>
           <div class="proj-body">
             <h3>Project 2: Sales-Forecasting-Time-Series</h3>
@@ -225,7 +258,7 @@ I specialize in handling this phase end-to-end, turning raw datasets into clean 
           </div>
         </article>
 
-        <article class="proj-card reveal">
+        <article class="proj-card reveal reveal-left">
           <div class="thumb"><img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/0*mR7bzszbpIK9Wv_9.jpg" alt="Project thumbnail"></div>
           <div class="proj-body">
             <h3>Project 3: Strategic Insights from Australian Lighting Industry Sales Data</h3>
@@ -235,7 +268,7 @@ I specialize in handling this phase end-to-end, turning raw datasets into clean 
           </div>
         </article>
 
-        <article class="proj-card reveal">
+        <article class="proj-card reveal reveal-right">
           <div class="thumb"><img src="https://cdn.botpenguin.com/assets/website/Big_Data_35e26a7d4d.webp" alt="Project thumbnail"></div>
           <div class="proj-body">
             <h3>Project 4: Possum Morphological Analysis: Data Cleaning, Statistical Testing & Regression Insights</h3>
@@ -245,7 +278,7 @@ I specialize in handling this phase end-to-end, turning raw datasets into clean 
           </div>
         </article>
 
-        <article class="proj-card reveal">
+        <article class="proj-card reveal reveal-left">
           <div class="thumb"><img src="https://media.istockphoto.com/id/1482734139/vector/report-business-analytics-market-research-concept.jpg?s=612x612&w=0&k=20&c=4WW-XVaeWiAzm3NFKh5hni8KfGXFADYZjstGBdFdDpk=" alt="Project thumbnail"></div>
           <div class="proj-body">
             <h3>Project 5: Comprehensive Data Analysis: Cleaning, Insights, and Statistical Findings for Sales & Profitability</h3>
@@ -260,50 +293,48 @@ I specialize in handling this phase end-to-end, turning raw datasets into clean 
     <div class="divider"></div>
 
     <!-- CONTACT (ONLY ONE – AT END) -->
-<section id="contact" class="section">
-  <div class="section-head">
-    <h2>Contact</h2>
-    <p>Choose how you’d like to reach me.</p>
-  </div>
-
-  <div class="contact-card surface reveal">
-
-    <div class="contact-item">
-      <div class="contact-left">
-        <div class="contact-icon">✉️</div>
-        <div class="contact-label">Email</div>
+    <section id="contact" class="section">
+      <div class="section-head">
+        <h2>Contact</h2>
+        <p>Choose how you’d like to reach me.</p>
       </div>
-      <a class="contact-link" href="mailto:parthrajguru79@gmail.com">
-        parthrajguru79@gmail.com
-      </a>
-    </div>
 
-    <div class="contact-item">
-      <div class="contact-left">
-        <div class="contact-icon">💻</div>
-        <div class="contact-label">GitHub</div>
+      <div class="contact-card surface reveal">
+        <div class="contact-item">
+          <div class="contact-left">
+            <div class="contact-icon">✉️</div>
+            <div class="contact-label">Email</div>
+          </div>
+          <a class="contact-link" href="mailto:parthrajguru79@gmail.com">
+            parthrajguru79@gmail.com
+          </a>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-left">
+            <div class="contact-icon">💻</div>
+            <div class="contact-label">GitHub</div>
+          </div>
+          <a class="contact-link" href="https://github.com/klifjtumper88" target="_blank" rel="noreferrer">
+            github.com/klifjtumper88
+          </a>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-left">
+            <div class="contact-icon">🔗</div>
+            <div class="contact-label">LinkedIn</div>
+          </div>
+          <a class="contact-link" href="https://www.linkedin.com/in/parth-rajguru/" target="_blank" rel="noreferrer">
+            parth-rajguru
+          </a>
+        </div>
+
+        <div class="contact-note">
+          No forms. No friction. Direct contact only.
+        </div>
       </div>
-      <a class="contact-link" href="https://github.com/klifjtumper88" target="_blank" rel="noreferrer">
-        github.com/klifjtumper88
-      </a>
-    </div>
-
-    <div class="contact-item">
-      <div class="contact-left">
-        <div class="contact-icon">🔗</div>
-        <div class="contact-label">LinkedIn</div>
-      </div>
-      <a class="contact-link" href="https://www.linkedin.com/in/parth-rajguru/" target="_blank" rel="noreferrer">
-        parth-rajguru
-      </a>
-    </div>
-
-    <div class="contact-note">
-      No forms. No friction. Direct contact only.
-    </div>
-  </div>
-</section>
-
+    </section>
 
   </main>
 
@@ -311,6 +342,7 @@ I specialize in handling this phase end-to-end, turning raw datasets into clean 
     © 2025 Parth Chetan Rajguru | Data Analytics Portfolio
   </footer>
 
+  <!-- keep using inline JS for now; we'll replace in Step 3 after CSS is perfect -->
   <script>
     const items = document.querySelectorAll(".reveal");
     const obs = new IntersectionObserver((entries) => {
