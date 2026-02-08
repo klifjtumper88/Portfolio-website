@@ -1,101 +1,105 @@
 document.addEventListener("DOMContentLoaded", () => {
-  /* Reveal animations */
+
+  /* =========================
+     REVEAL ANIMATIONS
+     ========================= */
   const reveals = document.querySelectorAll(".reveal");
-  const revealObs = new IntersectionObserver(
+  const revealObserver = new IntersectionObserver(
     (entries) => {
-      entries.forEach((e) => {
-        if (!e.isIntersecting) return;
-        e.target.classList.add("show");
-        revealObs.unobserve(e.target);
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("show");
+        revealObserver.unobserve(entry.target);
       });
     },
-    { threshold: 0.14, rootMargin: "0px 0px -8% 0px" }
+    { threshold: 0.15 }
   );
-  reveals.forEach((el) => revealObs.observe(el));
+  reveals.forEach((el) => revealObserver.observe(el));
 
-  /* Horizontal projects rail */
+  /* =========================
+     PROJECTS – HORIZONTAL STAGE
+     ========================= */
   const stage = document.querySelector(".project-stage");
   const rail = document.querySelector(".project-rail");
   const panels = Array.from(document.querySelectorAll(".project-panel"));
   const dotsWrap = document.querySelector(".project-dots");
 
-  // Debug: show if JS is running
-  const badge = document.createElement("div");
-  badge.textContent = "JS OK";
-  badge.style.position = "fixed";
-  badge.style.left = "78px";
-  badge.style.bottom = "10px";
-  badge.style.padding = "6px 10px";
-  badge.style.borderRadius = "999px";
-  badge.style.fontWeight = "900";
-  badge.style.fontSize = "12px";
-  badge.style.background = "rgba(199,169,107,0.35)";
-  badge.style.border = "1px solid rgba(199,169,107,0.75)";
-  badge.style.color = "#1A1511";
-  badge.style.zIndex = "9999";
-  document.body.appendChild(badge);
-
   if (!stage || !rail || panels.length === 0 || !dotsWrap) return;
 
   let index = 0;
-  let cooldown = false;
+  let locked = false;
 
-  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
-  const setIndex = (i) => {
-    index = clamp(i, 0, panels.length - 1);
-    rail.style.transform = `translate3d(${-index * 100}%, 0, 0)`;
-    dots.forEach((d, di) => d.classList.toggle("active", di === index));
-  };
-
-  /* Create dots */
+  /* ---------- DOTS ---------- */
   dotsWrap.innerHTML = "";
   const dots = panels.map((_, i) => {
     const b = document.createElement("button");
     b.className = "dotbtn";
     b.type = "button";
-    b.setAttribute("aria-label", `Go to project ${i + 1}`);
-    b.addEventListener("click", () => setIndex(i));
+    b.setAttribute("aria-label", `Project ${i + 1}`);
+    b.addEventListener("click", () => goTo(i));
     dotsWrap.appendChild(b);
     return b;
   });
 
-  setIndex(0);
+  /* ---------- UPDATE ---------- */
+  const update = () => {
+    rail.style.transform = `translate3d(${-index * 100}%, 0, 0)`;
 
-  /* Stage active check (no observer needed) */
-  const stageIsActive = () => {
+    dots.forEach((d, i) => {
+      d.classList.toggle("active", i === index);
+      d.classList.toggle("seen", i < index);
+    });
+  };
+
+  /* ---------- NAV ---------- */
+  const goTo = (i) => {
+    index = clamp(i, 0, panels.length - 1);
+    update();
+  };
+
+  update();
+
+  /* ---------- ACTIVE CHECK ---------- */
+  const stageActive = () => {
     const r = stage.getBoundingClientRect();
-    const mid = window.innerHeight * 0.52;
+    const mid = window.innerHeight * 0.55;
     return r.top < mid && r.bottom > mid;
   };
 
-  /* Wheel: vertical -> horizontal */
-  const onWheel = (e) => {
-    if (!stageIsActive()) return;
+  /* ---------- WHEEL CONTROL ---------- */
+  window.addEventListener(
+    "wheel",
+    (e) => {
+      if (!stageActive()) return;
 
-    // allow normal scroll at edges
-    if (index === 0 && e.deltaY < 0) return;
-    if (index === panels.length - 1 && e.deltaY > 0) return;
+      // allow normal scroll at edges
+      if (index === 0 && e.deltaY < 0) return;
+      if (index === panels.length - 1 && e.deltaY > 0) return;
 
-    e.preventDefault();
+      e.preventDefault();
+      if (locked) return;
 
-    if (cooldown) return;
-    cooldown = true;
+      locked = true;
 
-    if (e.deltaY > 0) setIndex(index + 1);
-    else setIndex(index - 1);
+      if (e.deltaY > 0) goTo(index + 1);
+      else goTo(index - 1);
 
-    setTimeout(() => (cooldown = false), 360);
-  };
+      // slow & elegant cooldown
+      setTimeout(() => (locked = false), 650);
+    },
+    { passive: false }
+  );
 
-  window.addEventListener("wheel", onWheel, { passive: false });
-
-  /* Keyboard support */
+  /* ---------- KEYBOARD ---------- */
   window.addEventListener("keydown", (e) => {
-    if (!stageIsActive()) return;
-    if (e.key === "ArrowRight") setIndex(index + 1);
-    if (e.key === "ArrowLeft") setIndex(index - 1);
+    if (!stageActive()) return;
+    if (e.key === "ArrowRight") goTo(index + 1);
+    if (e.key === "ArrowLeft") goTo(index - 1);
   });
 
-  window.addEventListener("resize", () => setIndex(index), { passive: true });
+  /* ---------- RESIZE FIX ---------- */
+  window.addEventListener("resize", update);
+
 });
