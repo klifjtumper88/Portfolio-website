@@ -1,13 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-  /* =========================
-     1) REVEAL (clean + premium)
-     ========================= */
+  /* Reveal */
   const reveals = document.querySelectorAll(".reveal");
-  reveals.forEach((el, i) => {
-    const d = Math.min(i * 60, 240);
-    el.style.transitionDelay = `${d}ms`;
-  });
-
   const revealObs = new IntersectionObserver(
     (entries) => {
       entries.forEach((e) => {
@@ -18,87 +11,74 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     { threshold: 0.14, rootMargin: "0px 0px -8% 0px" }
   );
-
   reveals.forEach((el) => revealObs.observe(el));
 
-  /* =========================
-     2) PROJECT STAGE (Apple-like)
-     sticky stage + scroll steps
-     ========================= */
+  /* Horizontal Projects Rail */
   const stage = document.querySelector(".project-stage");
+  const rail = document.querySelector(".project-rail");
   const panels = Array.from(document.querySelectorAll(".project-panel"));
-  const steps = Array.from(document.querySelectorAll(".track-step"));
   const dotsWrap = document.querySelector(".project-dots");
 
-  if (!stage || panels.length === 0 || steps.length === 0) return;
+  if (!stage || !rail || panels.length === 0 || !dotsWrap) return;
 
-  // Build dots
-  const dots = panels.map((_, idx) => {
+  let index = 0;
+  let locked = false;
+
+  const setIndex = (i) => {
+    index = Math.max(0, Math.min(panels.length - 1, i));
+    rail.style.transform = `translate3d(${-index * 100}%, 0, 0)`;
+    dots.forEach((d, di) => d.classList.toggle("active", di === index));
+  };
+
+  /* Dots */
+  dotsWrap.innerHTML = "";
+  const dots = panels.map((_, i) => {
     const b = document.createElement("button");
     b.className = "dotbtn";
     b.type = "button";
-    b.setAttribute("aria-label", `Go to project ${idx + 1}`);
-    b.addEventListener("click", () => {
-      // scroll to corresponding step (chapter-controlled)
-      const target = steps[idx] || steps[0];
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
+    b.setAttribute("aria-label", `Go to project ${i + 1}`);
+    b.addEventListener("click", () => setIndex(i));
     dotsWrap.appendChild(b);
     return b;
   });
 
-  const setActive = (index) => {
-    panels.forEach((p, i) => p.classList.toggle("is-active", i === index));
-    dots.forEach((d, i) => d.classList.toggle("active", i === index));
+  setIndex(0);
+
+  /* only hijack wheel when stage is mostly in view */
+  const stageInViewObs = new IntersectionObserver(
+    (entries) => {
+      locked = entries[0]?.isIntersecting ?? false;
+    },
+    { threshold: 0.65 }
+  );
+  stageInViewObs.observe(stage);
+
+  const onWheel = (e) => {
+    if (!locked) return;
+
+    // prevent page scroll and use wheel for horizontal movement
+    e.preventDefault();
+
+    const delta = e.deltaY;
+    if (Math.abs(delta) < 8) return;
+
+    if (delta > 0) setIndex(index + 1);
+    else setIndex(index - 1);
   };
 
-  // Start with first project
-  setActive(0);
+  // must be non-passive to preventDefault
+  window.addEventListener("wheel", onWheel, { passive: false });
 
-  // When a step enters view, switch project
- const stepObs = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((e) => {
-      if (!e.isIntersecting) return;
-      const idx = Number(e.target.dataset.step || "0");
-      if (Number.isFinite(idx)) setActive(idx);
-    });
-  },
-  {
-    threshold: 0.6,
-    rootMargin: "0px 0px -35% 0px",
-  }
-);
+  /* keyboard support */
+  window.addEventListener("keydown", (e) => {
+    if (!locked) return;
+    if (e.key === "ArrowRight") setIndex(index + 1);
+    if (e.key === "ArrowLeft") setIndex(index - 1);
+  });
 
+  /* keep correct size on resize */
+  window.addEventListener("resize", () => setIndex(index), { passive: true });
 
-  steps.forEach((s) => stepObs.observe(s));
-
-  /* =========================
-     3) EXTRA POLISH
-     keep stage “stable” on resize
-     ========================= */
-  let rafId = null;
-  const onResize = () => {
-    if (rafId) cancelAnimationFrame(rafId);
-    rafId = requestAnimationFrame(() => {
-      // re-assert current active index based on nearest step
-      const y = window.scrollY + window.innerHeight * 0.35;
-      let best = 0;
-      let bestDist = Infinity;
-
-      steps.forEach((step, idx) => {
-        const rect = step.getBoundingClientRect();
-        const stepY = window.scrollY + rect.top;
-        const dist = Math.abs(stepY - y);
-        if (dist < bestDist) {
-          bestDist = dist;
-          best = idx;
-        }
-      });
-
-      setActive(best);
-    });
-  };
-
-  window.addEventListener("resize", onResize, { passive: true });
+  /* optional: when user reaches first/last project, allow normal scroll feel */
+  // (we keep it simple for now)
 });
