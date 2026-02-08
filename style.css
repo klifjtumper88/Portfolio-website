@@ -583,3 +583,65 @@ body{
   .hero-title{ font-size: 2.35rem; }
   .chapter{ padding: 62px 0; }
 }
+/* ===============================
+   WATER / AIR FLOW REVEAL + FLOAT
+   =============================== */
+
+:root{
+  --floatA: 8px;
+  --floatB: 5px;
+}
+
+/* Base reveal now feels like “rising water” */
+.reveal{
+  opacity: 0;
+  transform: translateY(28px);
+  filter: blur(6px);
+  transition:
+    opacity 900ms cubic-bezier(.18,.92,.22,1),
+    transform 900ms cubic-bezier(.18,.92,.22,1),
+    filter 900ms cubic-bezier(.18,.92,.22,1);
+  will-change: opacity, transform, filter;
+}
+
+/* When revealed: settle + become crisp */
+.reveal.show{
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* Gentle floating after reveal */
+.reveal.floaty.show{
+  animation: floaty 5.6s ease-in-out infinite;
+  animation-delay: calc(var(--delay, 0ms) + 900ms);
+}
+
+@keyframes floaty{
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(calc(-1 * var(--floatA))); }
+}
+
+/* Slight variant to avoid “same-same” motion */
+.reveal.floaty2.show{
+  animation: floaty2 6.4s ease-in-out infinite;
+  animation-delay: calc(var(--delay, 0ms) + 900ms);
+}
+@keyframes floaty2{
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(calc(-1 * var(--floatB))); }
+}
+
+/* Make sure project links are always clickable (above any drag layers) */
+.project-copy{ position: relative; z-index: 3; }
+.project-link{ position: relative; z-index: 4; pointer-events: auto; }
+.project-media{ position: relative; z-index: 1; }
+.project-progress{ z-index: 5; }
+
+/* Optional: smoother hover, less “snappy” */
+.work-card, .cred-card, .contact-tile{
+  transition: transform 260ms ease, box-shadow 260ms ease;
+}
+.work-card:hover, .cred-card:hover, .contact-tile:hover{
+  transform: translateY(-6px);
+}
