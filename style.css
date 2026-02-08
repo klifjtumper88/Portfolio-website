@@ -602,3 +602,46 @@ body{
   .hero-title{ font-size: 2.35rem; }
   .chapter{ padding: 62px 0; }
 }
+/* Experience block formatting */
+.xp-block{ margin-top: 12px; }
+.xp-role{ font-weight: 900; }
+.xp-company{ margin-top: 6px; font-weight: 800; color: var(--muted); }
+.xp-list{
+  margin-top: 10px;
+  padding-left: 18px;
+  color: rgba(26,21,17,0.84);
+  line-height: 1.9;
+  font-weight: 700;
+}
+/* Make sure the Projects chapter has enough scroll runway */
+#projects{
+  padding-bottom: 40px;
+}
+
+/* Track should exist and create scroll space */
+.project-track{
+  height: 520vh;   /* more runway so changes always trigger */
+  position: relative;
+}
+
+/* Each step defines a clean switching zone */
+.track-step{
+  height: 100vh;
+}
+
+/* Add a subtle “Scroll to change projects” helper */
+.project-stage::after{
+  content: "Scroll to explore projects";
+  position: absolute;
+  left: 18px;
+  bottom: 14px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(246,241,234,0.86);
+  border: 1px solid rgba(26,21,17,0.16);
+  color: rgba(26,21,17,0.65);
+  font-weight: 900;
+  font-size: 0.78rem;
+  letter-spacing: 0.6px;
+}
+
